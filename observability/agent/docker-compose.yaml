@@ -1,0 +1,27 @@
+version: "3"
+services:
+  elastic-agent:
+    image: docker.elastic.co/beats/elastic-agent:8.8.0 
+    container_name: elastic-agent
+    restart: always
+    hostname: "stone-tech"
+    user: root # note, synthetic browser monitors require this set to `elastic-agent`
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /proc:/hostfs/proc:ro
+      - /var/log:/var/log:ro
+      - /var/lib:/hostfs/var/lib:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /etc:/hostfs/etc:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - SYS_PTRACE
+      - DAC_READ_SEARCH
+    environment:
+      - SYSTEM_HOSTFS=/hostfs
+      - FLEET_ENROLLMENT_TOKEN=${FLEET_ENROLLMENT_TOKEN}
+      - FLEET_ENROLL=1
+      - FLEET_URL=https://fleet.homeserver.espindula.me:443

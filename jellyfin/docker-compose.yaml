@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin 
+    networks:
+      - homeserver
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin 
+    volumes:
+      - ./config:/config
+      - ./tvshows:/data/tvshows
+      - ./movies:/data/movies 
+    restart: unless-stopped
+
+networks:
+  homeserver:
+    name: homeserver
+    external: true

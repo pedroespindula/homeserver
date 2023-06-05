@@ -1,0 +1,21 @@
+version: '2.2' 
+
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    networks:
+      - homeserver
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin 
+    volumes:
+      - ./nextcloud/appdata:/config 
+      - ./nextcloud/data:/data
+    restart: unless-stopped 
+
+networks:
+  homeserver:
+    name: homeserver
+    external: true
